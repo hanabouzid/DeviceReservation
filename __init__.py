@@ -75,7 +75,7 @@ class DeviceReservationSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder("device_reservation_intent").require('Add').require('device').optionally('time').build())
     def handle_device(self, message):
-        storage1 = Storage('/opt/mycroft/skills/devicereservationskill.hanabouzid/info.dat')
+        storage1 = Storage('/opt/mycroft/skills/devicereservation.hanabouzid/info.dat')
         credentials = storage1.get()
         if credentials is None or credentials.invalid == True:
             credentials = tools.run_flow(FLOW, storage1)
@@ -125,7 +125,7 @@ class DeviceReservationSkill(MycroftSkill):
             nameListe.append(names[0].get('displayName'))
         print(nameListe)
         print(adsmails)
-        nameEmp=self.get_response('can you tell me your name?')
+        nameEmp=self.get_response('What is your name please?')
         mailEmp=self.recherche(nameListe,adsmails,nameEmp)
         #service.list(customer='my_customer' , orderBy=None, pageToken=None, maxResults=None, query=None)
         #.get(customer=*, calendarResourceId=*)
@@ -145,7 +145,7 @@ class DeviceReservationSkill(MycroftSkill):
         for device in listdiv:
             l=self.rechDevice(device,freeDevices)
             if l!=[]:
-                self.speak_dialog("free", data={"device": device,'s':s})
+                self.speak_dialog('free', data={"device": device,'s':s})
                 choice = self.get_response('what is your choice?')
                 email= self.recherche(freeDevices,freemails,choice)
                 attendees.append({'email':email})
