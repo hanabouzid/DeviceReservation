@@ -90,11 +90,15 @@ class DeviceReservationSkill(MycroftSkill):
                                                              fields='connections,totalItems,nextSyncToken').execute()
         connections = results.get('connections', [])
         print("authorized")
+        listdiv=[]
         utt = message.data.get("utterance", None)
         liste1 = utt.split(" a ")
         liste2=liste1[1].split(" for ")
-        device=liste2[0]
-        print(device)
+        if ("and") in liste2[0]:
+            listdiv = liste2[0].split(" and ")
+        else:
+            listdiv.append(liste2[0])
+        print(listdiv)
         date1 = liste2[1]
         st = extract_datetime(date1)
         st = st[0] - self.utc_offset
@@ -122,12 +126,6 @@ class DeviceReservationSkill(MycroftSkill):
         print(adsmails)
         nameEmp=self.get_response('can you tell me your name?')
         mailEmp=self.recherche(nameListe,adsmails,nameEmp)
-        
-
-
-
-    
-
         #service.list(customer='my_customer' , orderBy=None, pageToken=None, maxResults=None, query=None)
         #.get(customer=*, calendarResourceId=*)
         listD=['FOCUS-RDC-PCFOCUS (1)']
@@ -143,52 +141,44 @@ class DeviceReservationSkill(MycroftSkill):
         print(freeDevices)
 
         s = ",".join(freeDevices)
-        l=self.rechDevice(device,freeDevices)
-        if l!=[]:
-            self.speak_dialog("free", data={"device": device,'s':s})
-            choice = self.get_response('what is your choice?')
-            email= self.recherche(freeDevices,freemails,choice)
-            attendees.append({'email':email})
-            summary=choice+"reservation for Mr/Ms"+nameEmp
-            description = "Mr/Ms" + nameEmp + "'s email:" + mailEmp
-            reservation = {
-                'summary': summary,
-                'description': description,
-                'location': 'Focus corporation',
-                'start': {
-                    'dateTime': datestart,
-                    'timeZone': 'America/Los_Angeles',
-                },
-                'end': {
-                    'dateTime': dater,
-                    'timeZone': 'America/Los_Angeles',
-                },
-                'recurrence': [
-                    'RRULE:FREQ=DAILY;COUNT=1'
-                ],
-                'attendees': attendees,
-                'reminders': {
-                    'useDefault': False,
-                    'overrides': [
-                        {'method': 'email', 'minutes': 24 * 60},
-                        {'method': 'popup', 'minutes': 10},
+        for device in listdiv:
+            l=self.rechDevice(device,freeDevices)
+            if l!=[]:
+                self.speak_dialog("free", data={"device": device,'s':s})
+                choice = self.get_response('what is your choice?')
+                email= self.recherche(freeDevices,freemails,choice)
+                attendees.append({'email':email})
+                summary=choice+"reservation for Mr/Ms"+nameEmp
+                description = "Mr/Ms" + nameEmp + "'s email:" + mailEmp
+                reservation = {
+                    'summary': summary,
+                    'description': description,
+                    'location': 'Focus corporation',
+                    'start': {
+                        'dateTime': datestart,
+                        'timeZone': 'America/Los_Angeles',
+                    },
+                    'end': {
+                        'dateTime': dater,
+                        'timeZone': 'America/Los_Angeles',
+                    },
+                    'recurrence': [
+                        'RRULE:FREQ=DAILY;COUNT=1'
                     ],
-                },
-            }
-            reservation = service.events().insert(calendarId='primary', sendNotifications=True, body=reservation).execute()
-            print('Event created: %s' % (reservation.get('htmlLink')))
-            self.speak_dialog("deviceReservated")
-        else :
-            self.speak_dialog("busy", data={"device": device})
-
-
-
-
-
-
-
-
-
+                    'attendees': attendees,
+                    'reminders': {
+                        'useDefault': False,
+                        'overrides': [
+                            {'method': 'email', 'minutes': 24 * 60},
+                            {'method': 'popup', 'minutes': 10},
+                        ],
+                    },
+                }
+                reservation = service.events().insert(calendarId='primary', sendNotifications=True, body=reservation).execute()
+                print('Event created: %s' % (reservation.get('htmlLink')))
+                self.speak_dialog("deviceReservated")
+            else :
+                self.speak_dialog("busy", data={"device": device})
 
 def create_skill():
     return DeviceReservationSkill()
