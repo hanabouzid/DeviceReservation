@@ -43,14 +43,6 @@ class DeviceReservationSkill(MycroftSkill):
                 mail = list2[i]
         return mail
 
-    def rechDevice(self,d, freedeviceslist):
-        l = []
-        for i in freedeviceslist:
-            if d in i:
-                l.append(i)
-
-        return l
-
     def freebusy(self, mail, datestart, datend, service):
         body = {
             "timeMin": datestart,
@@ -143,7 +135,11 @@ class DeviceReservationSkill(MycroftSkill):
 
         s = ",".join(freeDevices)
         for device in listdiv:
-            l=self.rechDevice(device,freeDevices)
+            l = []
+            for i in freeDevices:
+                print(i)
+                if device in i.lower():
+                    l.append(i)
             if l!=[]:
                 self.speak_dialog('free', data={"device": device,'s':s})
                 choice = self.get_response('what is your choice?')
