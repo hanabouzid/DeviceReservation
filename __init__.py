@@ -13,7 +13,7 @@ UTC_TZ = u'+00:00'
 FLOW = OAuth2WebServerFlow(
     client_id='73558912455-smu6u0uha6c2t56n2sigrp76imm2p35j.apps.googleusercontent.com',
     client_secret='0X_IKOiJbLIU_E5gN3NefNns',
-    scope=['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/contacts.readonly','https://www.googleapis.com/auth/admin.directory.resource.calendar'],
+    scope=['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/contacts.readonly'],
     user_agent='Smart assistant box')
 # TODO: Change "Template" to a unique name for your skill
 class DeviceReservationSkill(MycroftSkill):
