@@ -52,7 +52,7 @@ class DeviceReservationSkill(MycroftSkill):
                 elif (i == 'busy' and statut[i] != []):
                     return False
 
-    @intent_handler(IntentBuilder("device_reservation_intent").require('Add').require('device').optionally('time').build())
+    @intent_handler(IntentBuilder("device_res_intent").require('Add').require('device').optionally('time').build())
     def handle_device(self, message):
         storage1 = Storage('/opt/mycroft/skills/devicereservation.hanabouzid/info.dat')
         credentials = storage1.get()
