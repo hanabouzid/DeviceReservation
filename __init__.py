@@ -1,25 +1,13 @@
 from __future__ import print_function
-import json
-import sys
 from adapt.intent import IntentBuilder
-from adapt.engine import IntentDeterminationEngine
 from mycroft.skills.core import MycroftSkill, intent_handler
-from mycroft.util.log import LOG
-from mycroft.messagebus.message import Message
 from mycroft.util.parse import extract_datetime
 from datetime import datetime, timedelta
-import pickle
-import os.path
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
 import httplib2
 from googleapiclient.discovery import build
 from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client import tools
-
-import string
-import pytz
 #in the raspberry we add __main__.py for the authorization
 UTC_TZ = u'+00:00'
 FLOW = OAuth2WebServerFlow(
@@ -63,7 +51,6 @@ class DeviceReservationSkill(MycroftSkill):
                     # ajouter l'email de x ala liste des attendee
                 elif (i == 'busy' and statut[i] != []):
                     return False
-
 
     @intent_handler(IntentBuilder("device_reservation_intent").require('Add').require('device').optionally('time').build())
     def handle_device(self, message):
