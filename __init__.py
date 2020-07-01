@@ -98,7 +98,7 @@ class DeviceReservationSkill(MycroftSkill):
         datestart = st.strftime('%Y-%m-%dT%H:%M:00')
         datestart += UTC_TZ
         print(datestart)
-        date2=self.get_response('when you are going to return the device?')
+        date2=self.get_response('when will you return the device?')
         et = extract_datetime(date2)
         et = et[0] - self.utc_offset
         dater = et.etrftime('%Y-%m-%dT%H:%M:00')
@@ -121,7 +121,7 @@ class DeviceReservationSkill(MycroftSkill):
         mailEmp=self.recherche(nameListe,adsmails,nameEmp)
         #service.list(customer='my_customer' , orderBy=None, pageToken=None, maxResults=None, query=None)
         #.get(customer=*, calendarResourceId=*)
-        listD=['FOCUS-RDC-PCFOCUS (1)']
+        listD=['pcfocus']
         listDmails=['c_1882n3ruihk0qj7nnpqdpqhl5h4um4glcpnm6tbj5lhmusjgdtp62t39dtn2sorfdk@resource.calendar.google.com']
         freeDevices=[]
         freemails=[]
