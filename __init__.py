@@ -52,7 +52,7 @@ class DeviceReservationSkill(MycroftSkill):
                 elif (i == 'busy' and statut[i] != []):
                     return False
 
-    @intent_handler(IntentBuilder("device_res_intent").require('Add').require('device').optionally('time').build())
+    @intent_handler(IntentBuilder("add_device_intent").require('Add').require('device').optionally('time').build())
     def handle_device(self, message):
         storage1 = Storage('/opt/mycroft/skills/devicereservation.hanabouzid/info.dat')
         credentials = storage1.get()
@@ -160,7 +160,7 @@ class DeviceReservationSkill(MycroftSkill):
                 }
                 reservation = service.events().insert(calendarId='primary', sendNotifications=True, body=reservation).execute()
                 print('Event created: %s' % (reservation.get('htmlLink')))
-                self.speak_dialog('deviceReservated')
+                self.speak_dialog('deviceReserved')
             else :
                 self.speak_dialog('busy', data={"device": device})
 
