@@ -1,6 +1,10 @@
 from __future__ import print_function
+import json
+import sys
 from adapt.intent import IntentBuilder
+from adapt.engine import IntentDeterminationEngine
 from mycroft.skills.core import MycroftSkill, intent_handler
+from mycroft.messagebus.message import Message
 from mycroft.util.parse import extract_datetime
 from datetime import datetime, timedelta
 import httplib2
@@ -8,6 +12,9 @@ from googleapiclient.discovery import build
 from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client import tools
+
+import string
+import pytz
 #in the raspberry we add __main__.py for the authorization
 UTC_TZ = u'+00:00'
 FLOW = OAuth2WebServerFlow(
@@ -22,6 +29,7 @@ class DeviceReservationSkill(MycroftSkill):
     def __init__(self):
         super(DeviceReservationSkill, self).__init__(name="DeviceReservationSkill")
 
+    @property
     def utc_offset(self):
         return timedelta(seconds=self.location['timezone']['offset'] / 1000)
 
@@ -88,7 +96,7 @@ class DeviceReservationSkill(MycroftSkill):
         date2=self.get_response('when will you return the device?')
         et = extract_datetime(date2)
         et = et[0] - self.utc_offset
-        dater = et.etrftime('%Y-%m-%dT%H:%M:00')
+        dater = et.strftime('%Y-%m-%dT%H:%M:00')
         dater += UTC_TZ
         print(dater)
 
@@ -128,7 +136,7 @@ class DeviceReservationSkill(MycroftSkill):
                 if device in i.lower():
                     l.append(i)
             if l!=[]:
-                self.speak_dialog('free', data={"device": device,'s':s})
+                self.speak_dialog('free', data={"device": device,"s":s})
                 choice = self.get_response('what is your choice?')
                 email= self.recherche(freeDevices,freemails,choice)
                 attendees.append({'email':email})
