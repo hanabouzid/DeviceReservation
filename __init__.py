@@ -129,18 +129,20 @@ class DeviceReservationSkill(MycroftSkill):
         print(freeDevices)
 
         s = ",".join(freeDevices)
+        print( 'free devices'+ s)
         for device in listdiv:
-            l = []
+            l=[]
             for i in freeDevices:
                 print(i)
                 if device in i.lower():
                     l.append(i)
-            if l!=[]:
-                self.speak_dialog('free', data={"device": device,"s":s})
+                    print(l)
+            if l != []:
+                self.speak_dialog('free', data={"device": device, "s": s})
                 choice = self.get_response('what is your choice?')
-                email= self.recherche(freeDevices,freemails,choice)
-                attendees.append({'email':email})
-                summary=choice+"reservation for Mr/Ms"+nameEmp
+                email = self.recherche(freeDevices, freemails, choice)
+                attendees.append({'email': email})
+                summary = choice + "reservation for Mr/Ms" + nameEmp
                 description = "Mr/Ms" + nameEmp + "'s email:" + mailEmp
                 reservation = {
                     'summary': summary,
@@ -166,10 +168,11 @@ class DeviceReservationSkill(MycroftSkill):
                         ],
                     },
                 }
-                reservation = service.events().insert(calendarId='primary', sendNotifications=True, body=reservation).execute()
+                reservation = service.events().insert(calendarId='primary', sendNotifications=True,
+                                                      body=reservation).execute()
                 print('Event created: %s' % (reservation.get('htmlLink')))
-                self.speak_dialog('deviceReserved')
-            else :
+                self.speak_dialog('deviceReserved', data={"device": device})
+            else:
                 self.speak_dialog('busy', data={"device": device})
 
 def create_skill():
