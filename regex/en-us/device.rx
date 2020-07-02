@@ -1,1 +1,1 @@
-(?: a (?P<Device>.+))
+(?: a(?P<Device>.+))
