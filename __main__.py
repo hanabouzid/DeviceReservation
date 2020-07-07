@@ -13,7 +13,7 @@ FLOW = OAuth2WebServerFlow(
     client_secret='0X_IKOiJbLIU_E5gN3NefNns',
     scope=['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/contacts.readonly'],
     user_agent='Smart assistant box')
-storage1 = Storage('/opt/mycroft/skills/devicereservationskill.hanabouzid/info.dat')
+storage1 = Storage('/opt/mycroft/skills/devicereservation.hanabouzid/info.dat')
 credentials = storage1.get()
 if credentials is None or credentials.invalid == True:
   credentials = tools.run_flow(FLOW, storage1)

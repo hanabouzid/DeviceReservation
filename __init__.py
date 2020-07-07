@@ -1,8 +1,5 @@
 from __future__ import print_function
-import json
-import sys
 from adapt.intent import IntentBuilder
-from adapt.engine import IntentDeterminationEngine
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.messagebus.message import Message
 from mycroft.util.parse import extract_datetime
@@ -13,8 +10,6 @@ from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client import tools
 
-import string
-import pytz
 #in the raspberry we add __main__.py for the authorization
 UTC_TZ = u'+00:00'
 FLOW = OAuth2WebServerFlow(
@@ -121,17 +116,17 @@ class DeviceReservationSkill(MycroftSkill):
         freeDevices=[]
         freemails=[]
         for i in range(len(listDmails)):
-            x=self.freebusy(i,datestart,dater,service)
-            if x==True:
+            x = self.freebusy(i,datestart,dater,service)
+            if x == True:
                 freeDevices.append(listD[i])
                 freemails.append(listDmails[i])
         print(freemails)
         print(freeDevices)
 
         s = ",".join(freeDevices)
-        print( 'free devices'+ s)
+        print('free devices' + s)
         for device in listdiv:
-            l=[]
+            l = []
             for i in freeDevices:
                 print(i)
                 if device in i.lower():
